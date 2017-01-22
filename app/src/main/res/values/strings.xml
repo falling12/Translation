@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Translation</string>
+    <drawable name="lucency">#00000000</drawable>
+    <drawable name="pressed">#C3C3C3</drawable>
+</resources>
