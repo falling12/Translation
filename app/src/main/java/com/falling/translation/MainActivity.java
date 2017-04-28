@@ -1,5 +1,6 @@
 package com.falling.translation;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.media.MediaPlayer;
@@ -16,7 +17,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.menu.MenuAdapter;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -64,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements QueryCallBack {
     private TextView baiduWord = null;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Fresco.initialize(this);
@@ -76,11 +79,21 @@ public class MainActivity extends AppCompatActivity implements QueryCallBack {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!searchWord.getText().toString().equals("")) {
-                    dealMessage.getWord(searchWord.getText().toString());
-                } else {
-                    MyToast.showToast(MainActivity.this, "请输入要翻译的信息");
+                clickSearchButton();
+            }
+        });
+
+        searchWord.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    ((InputMethodManager) searchWord.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+                            .hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    clickSearchButton();
+                    return true;
                 }
+                return false;
             }
         });
 
@@ -194,6 +207,20 @@ public class MainActivity extends AppCompatActivity implements QueryCallBack {
     @Override
     public void loaded() {
         progressBar.hide();
+    }
+
+    private void clickSearchButton() {
+
+        ph_am_gif.setController(dcNotGif);
+        ph_am_gif.setClickable(true);
+        ph_en_gif.setController(dcNotGif);
+        ph_en_gif.setClickable(true);
+
+        if (!searchWord.getText().toString().equals("")) {
+            dealMessage.getWord(searchWord.getText().toString());
+        } else {
+            MyToast.showToast(MainActivity.this, "请输入要翻译的信息");
+        }
     }
 
     private void setWord(Word wWord) {

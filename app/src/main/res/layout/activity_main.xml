@@ -20,13 +20,14 @@
         android:weightSum="1">
 
         <EditText
+            android:imeOptions="actionDone"
             android:id="@+id/search_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start|bottom"
             android:layout_weight="1.00"
             android:hint="请输入翻译内容"
-            android:maxLines="1"
+            android:singleLine="true"
             android:scrollHorizontally="true"
             android:selectAllOnFocus="true" />
 
